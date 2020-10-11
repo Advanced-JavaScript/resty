@@ -1,0 +1,18 @@
+@import '../../base';
+
+footer {
+  text-align: center;
+  * {
+    color: white;
+  }
+
+  padding: $spacing * 1.25 0;
+  background-color: $lightPink;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+
+  a:visited {
+    color: white;
+  }
+}
