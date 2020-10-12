@@ -3,6 +3,7 @@ import React from 'react';
 import './App.css';
 import Header from './components/header/header';
 import Form from './components/form/form';
+import Results from './components/results/results';
 import Footer from './components/footer/footer';
 /**
  * @class App to use the other components
@@ -12,38 +13,33 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      url: '',
-      method: 'GET',
+      Count: 0,
+      results: [],
+      headers:'',
     };
   }
-  updateURL(value) {
-    this.setState({ url: value });
+
+  handleData(count, results, headers){
+    this.setState({count, results, headers});
   }
-  handleClick(value) {
-    this.setState({ method: value });
-  }
-  async fetchApi(value) {
-    console.log(this.state.method, this.state.url);
-    this.setState({ method: '' , url: ''});
-  }
+
   render() {
     return (
       <div className="App">
         <Header />
         <Form
-          value={this.state.url}
-          onChange={this.updateURL.bind(this)}
-          onClick={this.handleClick.bind(this)}
-          handleSubmit={this.fetchApi.bind(this)}
+          handleData = {this.handleData.bind(this)}
         />
-        <div>{this.state.method} Request, To the :{this.state.url}</div>
-        <textarea></textarea>
+        <Results 
+          count= {this.state.count}
+          results = {this.state.results}
+          headers = {this.state.headers}
+        />
         <Footer />
       </div>
     );
 
   }
-
 
 }
 
