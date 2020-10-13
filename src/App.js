@@ -5,6 +5,7 @@ import Header from './components/header/header';
 import Form from './components/form/form';
 import Results from './components/results/results';
 import Footer from './components/footer/footer';
+import If from './components/if/if';
 /**
  * @class App to use the other components
  */
@@ -14,13 +15,17 @@ class App extends React.Component {
 
     this.state = {
       Count: 0,
-      results: [],
+      results: null,
       headers:'',
     };
   }
 
-  handleData(count, results, headers){
-    this.setState({count, results, headers});
+  handleData(Count, results, headers){
+    this.setState({Count, results, headers});
+  }
+  fetchError = () =>{
+    let results = null;
+    this.setState({results});
   }
 
   render() {
@@ -29,12 +34,15 @@ class App extends React.Component {
         <Header />
         <Form
           handleData = {this.handleData.bind(this)}
+          fetchError = {this.fetchError}
         />
-        <Results 
-          count= {this.state.count}
-          results = {this.state.results}
-          headers = {this.state.headers}
-        />
+        <If condition={this.state.results}>
+          <Results 
+            Count= {this.state.count}
+            results = {this.state.results}
+            headers = {this.state.headers}
+          />
+        </If>
         <Footer />
       </div>
     );

@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import './form.scss';
+import History from '../history/history';
 /**
  * @component Form
  * @param {*} props for the form
@@ -11,6 +12,8 @@ class Form extends React.Component {
     this.state ={
       url: '',
       method: '',
+      toBeSaved: JSON.parse(localStorage.getItem('history')) || [],
+      body: null,
     };
   }
 
@@ -27,15 +30,51 @@ class Form extends React.Component {
     this.setState({method});
   }
 
-  handleSubmit = async (e) => {
-    let raw = await fetch(this.state.url);
-    let data = await raw.json();
-    let count = data.count;
-    let results = data.results;
-    let headers = {};
-    raw.headers.forEach( (val, key) => headers[key] = val);
+  saveToLocal = () => {
+    this.state.toBeSaved.push(
+      {
+        method: this.state.method,
+        url: this.state.url,
+      });
+    localStorage.setItem('history', JSON.stringify(this.state.toBeSaved));
 
-    this.props.handleData(count, results, headers);
+  }
+
+  fetchApi = async(url, options) =>{
+    try{
+      let raw = await fetch(url, options);
+      let data = await raw.json();
+      let count = data.count;
+      let results = data.results;
+      let headers = {};
+      raw.headers.forEach( (val, key) => headers[key] = val);
+
+      this.props.handleData(count, results, headers);
+
+    }
+    catch(e){
+      this.props.fetchError();
+    }
+    
+
+  }
+
+  handleSubmit = async (e) => {
+    this.saveToLocal();
+    let url = this.state.url;
+    let options = {
+      method: this.state.method,
+      headers: { 'Content-Type': 'application/json'},
+      body: this.state.method === 'GET' || this.state.method === 'DELETE'
+        ? null : JSON.stringify(this.state.body),
+    };
+    this.fetchApi(url, options);
+    
+  }
+
+  updateBody =(e)=> {
+    let body = e.target.value;
+    this.setState({ body });
   }
 
   
@@ -70,12 +109,13 @@ class Form extends React.Component {
           <button value="Submit" id="submit-btn" onClick={this.handleSubmit}>
               Submit
           </button>
+          
         </div>
+        <textarea onChange={this.updateBody}></textarea>
+        <History saved={this.state.toBeSaved} fetchApi= {this.fetchApi} body={this.state.body}/>
       </>
     );
-
-  }
-  
+  } 
 }
   
 export default Form;
