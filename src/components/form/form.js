@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import './form.scss';
 import History from '../history/history';
 /**
@@ -35,6 +36,7 @@ class Form extends React.Component {
       {
         method: this.state.method,
         url: this.state.url,
+        body: this.state.body,
       });
     localStorage.setItem('history', JSON.stringify(this.state.toBeSaved));
 
@@ -81,6 +83,7 @@ class Form extends React.Component {
   render() {
     return (
       <>
+
         <div className="method">
           <button
             value="GET" className="selected-btn" id="get-btn"
@@ -113,6 +116,7 @@ class Form extends React.Component {
         </div>
         <textarea onChange={this.updateBody}></textarea>
         <History saved={this.state.toBeSaved} fetchApi= {this.fetchApi} body={this.state.body}/>
+
       </>
     );
   } 
