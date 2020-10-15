@@ -13,13 +13,13 @@ function Header() {
       <nav className='nav'>
         <ul>
           <li> 
-            <NavLink data-testid="homelink" to="/">Home</NavLink>
+            <NavLink data-testid="home" to="/">Home</NavLink>
           </li>
           <li>
-            <NavLink data-testid="classiclink" to="/history">History</NavLink>
+            <NavLink data-testid="history" to="/history">History</NavLink>
           </li>
           <li>
-            <NavLink data-testid="renderlink" to="/help">Help</NavLink>
+            <NavLink data-testid="help" to="/help">Help</NavLink>
           </li>
         </ul>
       </nav>
